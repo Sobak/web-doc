@@ -3,7 +3,7 @@
 +----------------------------------------------------------------------+
 | PHP Documentation Tools Site Source Code                             |
 +----------------------------------------------------------------------+
-| Copyright (c) 1997-2014 The PHP Group                                |
+| Copyright (c) 1997-2017 The PHP Group                                |
 +----------------------------------------------------------------------+
 | This source file is subject to version 3.0 of the PHP license,       |
 | that is bundled with this package in the file LICENSE, and is        |
@@ -13,7 +13,7 @@
 | obtain it through the world-wide-web, please send a note to          |
 | license@php.net so we can mail you a copy immediately.               |
 +----------------------------------------------------------------------+
-| Original Authors: Thomas Schöfbeck <tom at php dot net>              |
+| Original Authors: Thomas SchÃ¶fbeck <tom at php dot net>              |
 |                   Gabor Hojtsy    <goba at php dot net>              |
 |                   Mark Kronsbein    <mk at php dot net>              |
 |                   Jan Fabry     <cheezy at php dot net>              |
@@ -260,7 +260,7 @@ function do_revcheck($dir = '') {
                 continue;
             }
 
-            if ($file != '.' && $file != '..' && $file != '.svn' && $dir != '/functions') {
+            if ($file != '.' && $file != '..' && $file != '.git' && $dir != '/functions') {
 
                 if (is_dir($DOCS . 'en' . $dir.'/' .$file)) {
                     $entriesDir[] = $file;
@@ -339,7 +339,7 @@ function check_old_files($dir = '', $lang) {
                 continue;
             }
 
-            if ($file != '.' && $file != '..' && $file != '.svn' && $dir != '/functions') {
+            if ($file != '.' && $file != '..' && $file != '.git' && $dir != '/functions') {
 
                 if (is_dir($DOCS . $lang . $dir.'/' .$file)) {
                     $entriesDir[] = $file;
@@ -387,7 +387,7 @@ function get_tags($file) {
     $match = array ();
 
     // Check for the translations "revision tag"
-    if (preg_match("/<!--\s*EN-Revision:\s*(\d+)\s*Maintainer:\s*(\\S*)\s*Status:\s*(.+)\s*-->/U",
+    if (preg_match("/<!--\s*EN-Revision:\s*([0-9a-fA-F]+)\s*Maintainer:\s*(\\S*)\s*Status:\s*(.+)\s*-->/U",
     $line, $match)) {
         // note the simple quotes
         return array("'" . trim($match[1]) . "'", "'" . trim($match[2]) . "'", "'" . trim($match[3]) . "'");
@@ -407,20 +407,13 @@ function get_tags($file) {
 } // get_tags() function end
 
 function get_original_rev($file) {
-    // Read the first 500 chars. The comment should be at
-    // the begining of the file
-    $fp = @fopen($file, "r") or die ("Unable to read $file.");
-    $line = fread($fp, 500);
-    fclose($fp);
+    global $DOCS;
 
-    // Return if this was needed (it should be there)
-    // . is for $ in the preg!
-    preg_match("/<!-- .Revision: (\d+) . -->/", $line, $match);
-    if (!empty($match)) {
-        return $match[1];
-    } else {
-        return 0;
-    }
+    $basepath = $DOCS . 'en/';
+
+    $file = substr($file, strlen($basepath));
+
+    return exec("cd $basepath && " . GIT_BIN . " log -1 --pretty=format:%h $file");
 }
 
 /**

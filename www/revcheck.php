@@ -324,8 +324,8 @@ END_OF_MULTILINE;
 				}
 
 				// Make a link to the SVN repository's diff script
-				$r['short_name'] = '<a href="http://svn.php.net/viewvc/phpdoc/en/trunk' . $r['name'] . '/' . $r['file'] .
-				'?r1=' . $r['trans_rev'] . '&amp;r2=' . $r['en_rev'] . '&amp;view=patch">' . $r['file'] . '</a>';
+				$r['short_name'] = '<a href="diff.php?filename=' . $r['name'] . '/' . $r['file'] .
+				'&amp;r1=' . $r['trans_rev'] . '&amp;r2=' . $r['en_rev'] . '">' . $r['file'] . '</a>';
 
 				// Add a [diff] link
 				$r['short_name'] .= ' <a href="http://svn.php.net/viewvc/phpdoc/en/trunk' . $r['name'] . '/' . $r['file'] .
@@ -334,8 +334,8 @@ END_OF_MULTILINE;
 				// Write out the line for the current file (get file name shorter)
 				echo '<tr>'.
 				"<td>{$r['short_name']}</td>".
-				"<td>{$r['en_rev']}</td>" .
-				"<td>{$r['trans_rev']}</td>" .
+				"<td>" . substr($r['en_rev'], 0, 6) . "</td>" .
+				"<td>" . substr($r['trans_rev'], 0, 6) . "</td>" .
 				"<td> {$r['maintainer']}</td>" .
 				"<td> {$r['status']}</td></tr>\n";
 			}

@@ -8,16 +8,19 @@ Requirements:
 - PHP 5
 - GD extension (for generating charts)
 - SQLite3
+- Git
 
 1. Unpack a copy of JpGraph 3.0.7 into `/include/jpgraph/` ([here](http://jpgraph.net/download/download.php?p=1))
 2. You need to run the scripts/populatedocs.sh to fetch all the required documentation for the site.
 3. Increase memory limit for PHP scripts to at least 32MB
 4. Fill in two configuration files
 	- `build-ops.sample.php` (rename it to `build-ops.php`)
+		- `@GITBIN` - an absolute path to system installation of Git
 		- `@SVNDIR@` - absolute path to dir where scripts will clone SVN repos to and then use them for generating data
 		- `@DOCDIR@` - relative path to the directory with documentation in SVN repo
 	- `build-ops-sample` (rename it to `build-ops` [no ext])
 		- `@PHP@` - path to the PHP executable file
+		- `@GITBIN` - an absolute path to system installation of Git
 		- `@SVNDIR@` - absolute path to dir where scripts will clone SVN repos to and then use them and then use it for generating data
 		- `@DOCDIR@` - relative path to the directory with documentation in SVN repo
 		- `@DOCWEB@` - absolute path to directory with this website
